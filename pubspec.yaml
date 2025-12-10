@@ -1,0 +1,43 @@
+name: akhil_raj_portfolio
+description: "Personal portfolio app for Akhil Raj - Senior Flutter Developer"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_bloc: ^9.0.0
+  hydrated_bloc: ^10.0.0
+
+  # UI & Theming
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.17
+
+  # URL Launcher
+  url_launcher: ^6.3.1
+
+  # Path Provider (for hydrated_bloc)
+  path_provider: ^2.1.5
+
+  # Animations
+  animations: ^2.0.11
+
+  # Icons
+  cupertino_icons: ^1.0.8
+  font_awesome_flutter: ^10.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
