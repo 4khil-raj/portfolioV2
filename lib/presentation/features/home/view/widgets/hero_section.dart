@@ -6,11 +6,9 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/utils/url_launcher_util.dart';
-import '../../../../common/widgets/animated_gradient_button.dart';
-import '../../../../common/widgets/social_icon_button.dart';
 import '../../view_model/home_cubit.dart';
 
-/// Hero section widget displaying profile image, introduction, and call-to-action buttons
+/// Modern 2025 Hero section with full image display
 class HeroSection extends StatelessWidget {
   final VoidCallback onContactPressed;
 
@@ -27,6 +25,7 @@ class HeroSection extends StatelessWidget {
         isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < AppSizes.mobileBreakpoint;
+    final isTablet = screenWidth < AppSizes.tabletBreakpoint;
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
@@ -34,268 +33,482 @@ class HeroSection extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? AppSizes.lg : AppSizes.xxl,
-            vertical: isMobile ? AppSizes.xl : AppSizes.xxxl,
+          constraints: BoxConstraints(
+            minHeight: isMobile ? 600 : 700,
           ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: isDark
-                  ? [
-                      AppColors.darkBackground,
-                      AppColors.darkSurface.withValues(alpha: 0.5),
-                      AppColors.darkBackground,
-                    ]
-                  : [
-                      AppColors.lightBackground,
-                      AppColors.lightSurface,
-                      AppColors.lightBackground,
-                    ],
-            ),
+            color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
           ),
-          child: Stack(
-            children: [
-              // Decorative gradient blobs
-              Positioned(
-                top: -150,
-                right: -100,
-                child: Container(
-                  width: 400,
-                  height: 400,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.primaryBlue.withValues(alpha: 0.15),
-                        AppColors.primaryBlue.withValues(alpha: 0.0),
-                      ],
-                    ),
-                  ),
-                ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? AppSizes.lg : AppSizes.xxl * 2,
+                vertical: isMobile ? AppSizes.xl : AppSizes.xxl,
               ),
-              Positioned(
-                top: 100,
-                left: -100,
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.primaryPurple.withValues(alpha: 0.1),
-                        AppColors.primaryPurple.withValues(alpha: 0.0),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: -80,
-                right: 50,
-                child: Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.primaryCyan.withValues(alpha: 0.1),
-                        AppColors.primaryCyan.withValues(alpha: 0.0),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // Main content
-              Center(
+              child: Center(
                 child: ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Profile Image with gradient border
-                      _buildProfileImage(isDark, isMobile),
-                      const SizedBox(height: AppSizes.xl),
-                      // Greeting
-                      Text(
-                        '${AppStrings.heroGreeting} ${AppStrings.heroWave}',
-                        style: AppTextStyles.titleLarge(secondaryColor),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSizes.sm),
-                      // Name
-                      Text(
-                        profile.name,
-                        style: isMobile
-                            ? AppTextStyles.displaySmall(textColor)
-                            : AppTextStyles.heroTitle(textColor),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSizes.md),
-                      // Title with gradient
-                      ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            AppColors.gradientStart,
-                            AppColors.gradientMiddle,
-                            AppColors.gradientEnd,
-                          ],
-                        ).createShader(bounds),
-                        child: Text(
-                          profile.title,
-                          style: isMobile
-                              ? AppTextStyles.headlineMedium(Colors.white)
-                              : AppTextStyles.headlineLarge(Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: AppSizes.lg),
-                      // Summary
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: Text(
-                          profile.summary,
-                          style: AppTextStyles.bodyLarge(secondaryColor),
-                          textAlign: TextAlign.center,
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(height: AppSizes.xl),
-                      // CTA Buttons
-                      Wrap(
-                        spacing: AppSizes.md,
-                        runSpacing: AppSizes.md,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          AnimatedGradientButton(
-                            text: AppStrings.downloadCv,
-                            icon: Icons.download_rounded,
-                            onPressed: () {
-                              UrlLauncherUtil.launchURL(AppStrings.cvUrl);
-                            },
-                          ),
-                          AnimatedGradientButton(
-                            text: AppStrings.contactMe,
-                            icon: Icons.mail_outline_rounded,
-                            isPrimary: false,
-                            onPressed: onContactPressed,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: AppSizes.xl),
-                      // Social icons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SocialIconButton(
-                            icon: FontAwesomeIcons.github,
-                            tooltip: AppStrings.github,
-                            onPressed: () {
-                              UrlLauncherUtil.openGitHub(
-                                  profile.socialLinks.github);
-                            },
-                          ),
-                          const SizedBox(width: AppSizes.md),
-                          SocialIconButton(
-                            icon: FontAwesomeIcons.linkedin,
-                            tooltip: AppStrings.linkedin,
-                            onPressed: () {
-                              UrlLauncherUtil.openLinkedIn(
-                                  profile.socialLinks.linkedin);
-                            },
-                          ),
-                          const SizedBox(width: AppSizes.md),
-                          SocialIconButton(
-                            icon: FontAwesomeIcons.code,
-                            tooltip: AppStrings.leetcode,
-                            onPressed: () {
-                              UrlLauncherUtil.openLeetCode(
-                                  profile.socialLinks.leetcode);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  constraints: const BoxConstraints(maxWidth: 1400),
+                  child: isMobile || isTablet
+                      ? _buildMobileLayout(context, profile, isDark, textColor, secondaryColor, isMobile)
+                      : _buildDesktopLayout(context, profile, isDark, textColor, secondaryColor),
                 ),
               ),
-            ],
+            ),
           ),
         );
       },
     );
   }
 
-  /// Builds the profile image with animated gradient border
-  Widget _buildProfileImage(bool isDark, bool isMobile) {
-    final imageSize = isMobile ? 140.0 : 180.0;
-    final borderWidth = isMobile ? 4.0 : 5.0;
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    dynamic profile,
+    bool isDark,
+    Color textColor,
+    Color secondaryColor,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 5,
+          child: _buildTextContent(context, profile, isDark, textColor, secondaryColor, false),
+        ),
+        const SizedBox(width: AppSizes.xxl * 2),
+        Expanded(
+          flex: 4,
+          child: _buildProfileImage(isDark, false),
+        ),
+      ],
+    );
+  }
 
-    return Container(
-      width: imageSize + borderWidth * 2,
-      height: imageSize + borderWidth * 2,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd,
+  Widget _buildMobileLayout(
+    BuildContext context,
+    dynamic profile,
+    bool isDark,
+    Color textColor,
+    Color secondaryColor,
+    bool isMobile,
+  ) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildProfileImage(isDark, true),
+        const SizedBox(height: AppSizes.xxl),
+        _buildTextContent(context, profile, isDark, textColor, secondaryColor, true),
+      ],
+    );
+  }
+
+  Widget _buildTextContent(
+    BuildContext context,
+    dynamic profile,
+    bool isDark,
+    Color textColor,
+    Color secondaryColor,
+    bool isMobile,
+  ) {
+    return Column(
+      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Status badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: AppColors.accent.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.accent.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Available for work',
+                style: AppTextStyles.labelSmall(AppColors.accent),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSizes.lg),
+        // Name with gradient
+        ShaderMask(
+          shaderCallback: (bounds) => const LinearGradient(
+            colors: [AppColors.primary, AppColors.secondary],
+          ).createShader(bounds),
+          child: Text(
+            profile.name,
+            style: isMobile
+                ? AppTextStyles.displaySmall(Colors.white)
+                : AppTextStyles.displayLarge(Colors.white),
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
+          ),
+        ),
+        const SizedBox(height: AppSizes.sm),
+        // Title
+        Text(
+          profile.title,
+          style: isMobile
+              ? AppTextStyles.titleLarge(secondaryColor)
+              : AppTextStyles.headlineSmall(secondaryColor),
+          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+        ),
+        const SizedBox(height: AppSizes.lg),
+        // Summary
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 520),
+          child: Text(
+            profile.heroSummary,
+            style: AppTextStyles.bodyLarge(secondaryColor).copyWith(height: 1.7),
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(height: AppSizes.xl),
+        // CTA Buttons
+        Wrap(
+          spacing: AppSizes.md,
+          runSpacing: AppSizes.md,
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          children: [
+            _PrimaryButton(
+              text: AppStrings.contactMe,
+              onPressed: onContactPressed,
+            ),
+            _OutlineButton(
+              text: AppStrings.downloadCv,
+              icon: Icons.download_rounded,
+              onPressed: () => UrlLauncherUtil.downloadCV(AppStrings.cvUrl),
+              isDark: isDark,
+            ),
           ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryBlue.withValues(alpha: 0.3),
-            blurRadius: 30,
-            spreadRadius: 5,
+        const SizedBox(height: AppSizes.xxl),
+        // Social links
+        Row(
+          mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+          children: [
+            Text(
+              'Find me on',
+              style: AppTextStyles.labelSmall(secondaryColor),
+            ),
+            const SizedBox(width: AppSizes.md),
+            _SocialIcon(
+              icon: FontAwesomeIcons.github,
+              onPressed: () => UrlLauncherUtil.openGitHub(profile.socialLinks.github),
+              isDark: isDark,
+            ),
+            const SizedBox(width: AppSizes.sm),
+            _SocialIcon(
+              icon: FontAwesomeIcons.linkedin,
+              onPressed: () => UrlLauncherUtil.openLinkedIn(profile.socialLinks.linkedin),
+              isDark: isDark,
+            ),
+            const SizedBox(width: AppSizes.sm),
+            _SocialIcon(
+              icon: FontAwesomeIcons.code,
+              onPressed: () => UrlLauncherUtil.openLeetCode(profile.socialLinks.leetcode),
+              isDark: isDark,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileImage(bool isDark, bool isMobile) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: isMobile ? 280 : 420,
+        maxHeight: isMobile ? 320 : 480,
+      ),
+      child: Stack(
+        children: [
+          // Background decorative shape
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: isMobile ? 240 : 360,
+              height: isMobile ? 280 : 420,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.primary.withValues(alpha: 0.1),
+                    AppColors.secondary.withValues(alpha: 0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(isMobile ? 20 : 30),
+              ),
+            ),
+          ),
+          // Main image
+          Positioned(
+            left: isMobile ? 20 : 30,
+            top: isMobile ? 20 : 30,
+            child: Container(
+              width: isMobile ? 240 : 360,
+              height: isMobile ? 280 : 420,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(isMobile ? 16 : 24),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.2),
+                    blurRadius: 40,
+                    offset: const Offset(0, 20),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(isMobile ? 16 : 24),
+                child: Image.asset(
+                  'assets/images/profile.jpg',
+                  width: isMobile ? 240 : 360,
+                  height: isMobile ? 280 : 420,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: isMobile ? 240 : 360,
+                      height: isMobile ? 280 : 420,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.primary.withValues(alpha: 0.2),
+                            AppColors.secondary.withValues(alpha: 0.2),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(isMobile ? 16 : 24),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/download.png',
+                          width: isMobile ? 100 : 150,
+                          height: isMobile ? 100 : 150,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      child: Container(
-        margin: EdgeInsets.all(borderWidth),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-        ),
-        child: ClipOval(
-          child: Image.asset(
-            'assets/images/profile.jpg',
-            width: imageSize,
-            height: imageSize,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              // Fallback to initials if image not found
-              return Container(
-                width: imageSize,
-                height: imageSize,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.gradientStart.withValues(alpha: 0.2),
-                      AppColors.gradientEnd.withValues(alpha: 0.2),
-                    ],
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'AR',
-                    style: AppTextStyles.displaySmall(
-                      isDark ? AppColors.darkText : AppColors.lightText,
+    );
+  }
+}
+
+/// Primary CTA button with gradient
+class _PrimaryButton extends StatefulWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const _PrimaryButton({
+    required this.text,
+    required this.onPressed,
+  });
+
+  @override
+  State<_PrimaryButton> createState() => _PrimaryButtonState();
+}
+
+class _PrimaryButtonState extends State<_PrimaryButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 28,
+            vertical: 14,
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: _isHovered
+                  ? [AppColors.primaryDark, AppColors.primary]
+                  : [AppColors.primary, AppColors.primaryLight],
+            ),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
                     ),
-                  ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.text,
+                style: AppTextStyles.button(Colors.white),
+              ),
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.arrow_forward_rounded,
+                size: 18,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Outline button
+class _OutlineButton extends StatefulWidget {
+  final String text;
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool isDark;
+
+  const _OutlineButton({
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+    required this.isDark,
+  });
+
+  @override
+  State<_OutlineButton> createState() => _OutlineButtonState();
+}
+
+class _OutlineButtonState extends State<_OutlineButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = widget.isDark ? AppColors.darkText : AppColors.lightText;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 28,
+            vertical: 14,
+          ),
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? (widget.isDark ? AppColors.darkSurface : AppColors.lightDivider)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _isHovered
+                  ? AppColors.primary
+                  : (widget.isDark ? AppColors.darkDivider : AppColors.lightDivider),
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                size: 18,
+                color: _isHovered ? AppColors.primary : textColor,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                widget.text,
+                style: AppTextStyles.button(
+                  _isHovered ? AppColors.primary : textColor,
                 ),
-              );
-            },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Social icon button
+class _SocialIcon extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool isDark;
+
+  const _SocialIcon({
+    required this.icon,
+    required this.onPressed,
+    required this.isDark,
+  });
+
+  @override
+  State<_SocialIcon> createState() => _SocialIconState();
+}
+
+class _SocialIconState extends State<_SocialIcon> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? AppColors.primary.withValues(alpha: 0.1)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: _isHovered
+                  ? AppColors.primary.withValues(alpha: 0.3)
+                  : (widget.isDark ? AppColors.darkDivider : AppColors.lightDivider),
+            ),
+          ),
+          child: Center(
+            child: FaIcon(
+              widget.icon,
+              size: 16,
+              color: _isHovered
+                  ? AppColors.primary
+                  : (widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
+            ),
           ),
         ),
       ),

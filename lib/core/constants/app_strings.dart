@@ -3,7 +3,7 @@ class AppStrings {
   AppStrings._();
 
   // App info
-  static const String appName = 'Akhil Raj Portfolio';
+  static const String appName = 'Akhil Raj';
 
   // Section titles
   static const String hero = 'Hero';
@@ -28,7 +28,7 @@ class AppStrings {
   static const String viewMore = 'View More';
 
   // About section
-  static const String yearsExperience = '2.5+';
+  static const String yearsExperience = '2.7+';
   static const String yearsLabel = 'Years Experience';
   static const String projectsCompleted = '10+';
   static const String projectsLabel = 'Projects Completed';
@@ -51,8 +51,10 @@ class AppStrings {
 
   // Footer
   static const String footerText = 'Built with Flutter & \u{2764}\u{FE0F}';
-  static const String copyright = '\u{00A9} 2024 Akhil Raj. All rights reserved.';
+  static const String copyright =
+      '\u{00A9} 2024 Akhil Raj. All rights reserved.';
 
-  // Placeholders
-  static const String cvUrl = 'https://drive.google.com/your-cv-link';
+  // CV
+  static const String cvUrl = 'assets/images/Akhil_Raj.pdf';
+  static const String cvFileName = 'Akhil_Raj.pdf';
 }

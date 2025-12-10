@@ -21,13 +21,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
       title: 'Senior Flutter Developer',
       email: 'akhilraj20801@gmail.com',
       phone: '+91 8943514279',
-      summary:
-          'Results-oriented Senior Flutter Developer with 2.5+ years of experience in architecting, developing, and deploying scalable cross-platform applications using Flutter, Dart, Firebase, and modern architectures. Passionate about creating beautiful, performant mobile experiences with clean code and best practices.',
+      heroSummary:
+          'Crafting exceptional mobile experiences with Flutter. I build high-performance, scalable apps with clean architecture and pixel-perfect UI that users love.',
+      aboutSummary:
+          'Results-oriented Senior Flutter Developer with 2.7+ years of experience in architecting, developing, and deploying scalable cross-platform applications using Flutter, Dart, Firebase, and modern architectures. Passionate about creating beautiful, performant mobile experiences with clean code and best practices.',
       location: 'Kerala, India',
       socialLinks: SocialLinks(
         github: 'https://github.com/4khil-raj',
         linkedin: 'https://www.linkedin.com/in/akhil-raj-0b9365284/',
-        leetcode: 'https://leetcode.com/akhilraj20801',
+        leetcode: 'https://leetcode.com/u/4khil_Raj/',
       ),
     );
   }
@@ -104,43 +106,53 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return const [
       SkillCategoryModel(
         category: 'Languages',
-        skills: ['Dart'],
+        skills: ['Dart', 'JavaScript'],
         colorIndex: 0,
       ),
       SkillCategoryModel(
         category: 'Frameworks',
-        skills: ['Flutter'],
+        skills: ['Flutter', 'Flutter Web', 'Flutter Desktop'],
         colorIndex: 1,
       ),
       SkillCategoryModel(
         category: 'State Management',
-        skills: ['Bloc', 'Provider', 'GetX', 'Riverpod'],
+        skills: ['Bloc', 'Cubit', 'Provider', 'GetX', 'Riverpod'],
         colorIndex: 2,
       ),
       SkillCategoryModel(
         category: 'Database',
-        skills: ['Firebase', 'Hive', 'SQLite'],
+        skills: ['Firebase Firestore', 'Hive', 'SQLite', 'Shared Preferences'],
         colorIndex: 3,
       ),
       SkillCategoryModel(
-        category: 'Backend',
-        skills: ['REST APIs', 'GraphQL (basic)'],
+        category: 'Backend & APIs',
+        skills: ['REST APIs', 'GraphQL', 'Firebase Auth', 'Cloud Functions'],
         colorIndex: 4,
       ),
       SkillCategoryModel(
-        category: 'Tools',
-        skills: ['Git', 'GitHub', 'Postman', 'Swagger', 'Figma', 'Canva'],
+        category: 'UI & Animations',
+        skills: ['Custom Widgets', 'Animations', 'Responsive Design', 'Material 3'],
         colorIndex: 5,
       ),
       SkillCategoryModel(
-        category: 'Architecture',
-        skills: ['Domain Driven Design', 'Clean Architecture', 'MVC', 'MVVM'],
+        category: 'Tools & Version Control',
+        skills: ['Git', 'GitHub', 'VS Code', 'Android Studio', 'Postman', 'Figma'],
         colorIndex: 6,
       ),
       SkillCategoryModel(
-        category: 'Deployment',
-        skills: ['CI/CD', 'Play Store', 'App Store'],
+        category: 'Architecture',
+        skills: ['Clean Architecture', 'Domain Driven Design', 'MVVM', 'MVC'],
         colorIndex: 7,
+      ),
+      SkillCategoryModel(
+        category: 'Deployment',
+        skills: ['Play Store', 'App Store', 'CI/CD', 'Fastlane', 'Firebase Hosting'],
+        colorIndex: 0,
+      ),
+      SkillCategoryModel(
+        category: 'Testing',
+        skills: ['Unit Testing', 'Widget Testing', 'Integration Testing'],
+        colorIndex: 1,
       ),
     ];
   }
@@ -150,10 +162,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return const [
       SkillModel(name: 'Flutter', proficiency: 0.95),
       SkillModel(name: 'Dart', proficiency: 0.92),
-      SkillModel(name: 'Bloc', proficiency: 0.90),
+      SkillModel(name: 'Bloc/Cubit', proficiency: 0.90),
       SkillModel(name: 'Firebase', proficiency: 0.85),
       SkillModel(name: 'REST APIs', proficiency: 0.88),
       SkillModel(name: 'Git', proficiency: 0.85),
+      SkillModel(name: 'Provider', proficiency: 0.88),
+      SkillModel(name: 'Clean Architecture', proficiency: 0.85),
+      SkillModel(name: 'UI/UX Design', proficiency: 0.82),
+      SkillModel(name: 'App Deployment', proficiency: 0.80),
     ];
   }
 }

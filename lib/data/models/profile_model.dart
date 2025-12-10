@@ -4,7 +4,8 @@ class ProfileModel {
   final String title;
   final String email;
   final String phone;
-  final String summary;
+  final String heroSummary;
+  final String aboutSummary;
   final String location;
   final SocialLinks socialLinks;
 
@@ -13,7 +14,8 @@ class ProfileModel {
     required this.title,
     required this.email,
     required this.phone,
-    required this.summary,
+    required this.heroSummary,
+    required this.aboutSummary,
     required this.location,
     required this.socialLinks,
   });

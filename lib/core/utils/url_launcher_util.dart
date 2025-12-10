@@ -1,4 +1,5 @@
 import 'package:url_launcher/url_launcher.dart';
+import 'download_util_web.dart';
 
 /// Utility class for launching URLs and handling external links
 class UrlLauncherUtil {
@@ -8,16 +9,17 @@ class UrlLauncherUtil {
   static Future<bool> launchURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      return await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
+      return await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
     return false;
   }
 
   /// Opens the default email client with the specified email address
-  static Future<bool> sendEmail(String email, {String? subject, String? body}) async {
+  static Future<bool> sendEmail(
+    String email, {
+    String? subject,
+    String? body,
+  }) async {
     final uri = Uri(
       scheme: 'mailto',
       path: email,
@@ -34,10 +36,7 @@ class UrlLauncherUtil {
 
   /// Opens the phone dialer with the specified phone number
   static Future<bool> makeCall(String phoneNumber) async {
-    final uri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
+    final uri = Uri(scheme: 'tel', path: phoneNumber);
     if (await canLaunchUrl(uri)) {
       return await launchUrl(uri);
     }
@@ -45,16 +44,16 @@ class UrlLauncherUtil {
   }
 
   /// Opens WhatsApp with the specified phone number
-  static Future<bool> openWhatsApp(String phoneNumber, {String? message}) async {
+  static Future<bool> openWhatsApp(
+    String phoneNumber, {
+    String? message,
+  }) async {
     final cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
     final uri = Uri.parse(
       'https://wa.me/$cleanNumber${message != null ? '?text=${Uri.encodeComponent(message)}' : ''}',
     );
     if (await canLaunchUrl(uri)) {
-      return await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
+      return await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
     return false;
   }
@@ -72,5 +71,13 @@ class UrlLauncherUtil {
   /// Opens LeetCode profile
   static Future<bool> openLeetCode(String profileUrl) async {
     return launchURL(profileUrl);
+  }
+
+  /// Downloads a file from assets (for web)
+  static void downloadCV(
+    String assetPath, {
+    String fileName = 'Akhil_Raj.pdf',
+  }) {
+    downloadFileWeb(assetPath, fileName);
   }
 }
