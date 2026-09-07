@@ -26,13 +26,13 @@ dependencies:
 
   # Animations
   animations: ^2.0.11
+  visibility_detector: ^0.4.0+2
+  flutter_staggered_animations: ^1.1.1
 
   # Icons
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.8.0
 
-  # Web support
-  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:

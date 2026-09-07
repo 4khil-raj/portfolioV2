@@ -3,18 +3,17 @@ import '../../../../data/models/profile_model.dart';
 import '../../../../data/models/experience_model.dart';
 import '../../../../data/models/education_model.dart';
 import '../../../../data/models/skill_model.dart';
+import '../../../../data/models/project_model.dart';
 import '../../../../data/repositories/profile_repository.dart';
 
 /// Home state containing all portfolio data
-///
-/// This state class holds all the data needed for the home screen,
-/// including profile info, experiences, education, and skills.
 class HomeState {
   final ProfileModel profile;
   final List<ExperienceModel> experiences;
   final List<EducationModel> education;
   final List<SkillCategoryModel> skillCategories;
   final List<SkillModel> mainSkills;
+  final List<ProjectModel> projects;
   final bool isLoading;
 
   const HomeState({
@@ -23,6 +22,7 @@ class HomeState {
     required this.education,
     required this.skillCategories,
     required this.mainSkills,
+    required this.projects,
     this.isLoading = false,
   });
 
@@ -32,6 +32,7 @@ class HomeState {
     List<EducationModel>? education,
     List<SkillCategoryModel>? skillCategories,
     List<SkillModel>? mainSkills,
+    List<ProjectModel>? projects,
     bool? isLoading,
   }) {
     return HomeState(
@@ -40,25 +41,13 @@ class HomeState {
       education: education ?? this.education,
       skillCategories: skillCategories ?? this.skillCategories,
       mainSkills: mainSkills ?? this.mainSkills,
+      projects: projects ?? this.projects,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 }
 
 /// HomeCubit acts as the ViewModel in MVVM architecture.
-///
-/// It manages the state for the home screen by:
-/// - Loading data from ProfileRepository
-/// - Exposing ProfileModel, ExperienceModel, EducationModel, and SkillModels
-/// - No async work needed since data is hardcoded in the repository
-///
-/// Usage in View:
-/// ```dart
-/// BlocProvider(
-///   create: (_) => HomeCubit(ProfileRepositoryImpl()),
-///   child: HomeScreen(),
-/// )
-/// ```
 class HomeCubit extends Cubit<HomeState> {
   final ProfileRepository _repository;
 
@@ -69,6 +58,7 @@ class HomeCubit extends Cubit<HomeState> {
           education: _repository.getEducation(),
           skillCategories: _repository.getSkillCategories(),
           mainSkills: _repository.getMainSkills(),
+          projects: _repository.getProjects(),
         ));
 
   /// Refreshes all portfolio data from repository
@@ -80,7 +70,9 @@ class HomeCubit extends Cubit<HomeState> {
       education: _repository.getEducation(),
       skillCategories: _repository.getSkillCategories(),
       mainSkills: _repository.getMainSkills(),
+      projects: _repository.getProjects(),
       isLoading: false,
     ));
   }
 }
+

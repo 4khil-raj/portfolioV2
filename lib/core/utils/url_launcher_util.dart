@@ -1,5 +1,4 @@
 import 'package:url_launcher/url_launcher.dart';
-import 'download_util_web.dart';
 
 /// Utility class for launching URLs and handling external links
 class UrlLauncherUtil {
@@ -73,11 +72,11 @@ class UrlLauncherUtil {
     return launchURL(profileUrl);
   }
 
-  /// Downloads a file from assets (for web)
-  static void downloadCV(
+  /// Downloads / opens a file from assets or URL
+  static Future<bool> downloadCV(
     String assetPath, {
     String fileName = 'Akhil_Raj.pdf',
-  }) {
-    downloadFileWeb(assetPath, fileName);
+  }) async {
+    return launchURL(assetPath);
   }
 }

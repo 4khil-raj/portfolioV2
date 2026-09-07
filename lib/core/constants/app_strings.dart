@@ -28,7 +28,7 @@ class AppStrings {
   static const String viewMore = 'View More';
 
   // About section
-  static const String yearsExperience = '2.7+';
+  static const String yearsExperience = '3+';
   static const String yearsLabel = 'Years Experience';
   static const String projectsCompleted = '10+';
   static const String projectsLabel = 'Projects Completed';
@@ -55,6 +55,7 @@ class AppStrings {
       '\u{00A9} 2024 Akhil Raj. All rights reserved.';
 
   // CV
-  static const String cvUrl = 'assets/images/Akhil_Raj.pdf';
+  static const String cvUrl =
+      'https://drive.google.com/file/d/17CJD7_UgRzvLDfy7PqjodIErS0IG3WJw/view?usp=sharing';
   static const String cvFileName = 'Akhil_Raj.pdf';
 }

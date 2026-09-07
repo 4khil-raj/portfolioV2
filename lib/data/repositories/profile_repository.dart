@@ -2,6 +2,7 @@ import '../models/profile_model.dart';
 import '../models/experience_model.dart';
 import '../models/education_model.dart';
 import '../models/skill_model.dart';
+import '../models/project_model.dart';
 
 /// Abstract repository interface for profile data
 abstract class ProfileRepository {
@@ -10,9 +11,10 @@ abstract class ProfileRepository {
   List<EducationModel> getEducation();
   List<SkillCategoryModel> getSkillCategories();
   List<SkillModel> getMainSkills();
+  List<ProjectModel> getProjects();
 }
 
-/// Implementation of ProfileRepository with hardcoded CV data
+/// Implementation of ProfileRepository with hardcoded CV data matching latest resume
 class ProfileRepositoryImpl implements ProfileRepository {
   @override
   ProfileModel getProfile() {
@@ -22,9 +24,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
       email: 'akhilraj20801@gmail.com',
       phone: '+91 8943514279',
       heroSummary:
-          'Crafting exceptional mobile experiences with Flutter. I build high-performance, scalable apps with clean architecture and pixel-perfect UI that users love.',
+          'Crafting exceptional cross-platform experiences with Flutter, Dart & AI-Assisted Workflows. I build high-performance, scalable apps with clean architecture, domain-driven design, and pixel-perfect UI.',
       aboutSummary:
-          'Results-oriented Senior Flutter Developer with 2.7+ years of experience in architecting, developing, and deploying scalable cross-platform applications using Flutter, Dart, Firebase, and modern architectures. Passionate about creating beautiful, performant mobile experiences with clean code and best practices.',
+          'Results-oriented Senior Flutter Developer with 3+ years of professional experience architecting, developing, and deploying scalable cross-platform mobile applications. Skilled in Flutter, Dart, Firebase, REST APIs, GraphQL, WebSockets, Payment Gateways, Bloc/Provider/GetX/Riverpod, unit and widget testing, native Android/iOS platform integration, and AI-Assisted Development (GitHub Copilot, Claude API) using modern Vibe Coding Workflows. Proven track record delivering high-performance, production-grade apps, mentoring junior developers, and collaborating cross-functionally in Agile/Scrum teams to meet business goals.',
       location: 'Kerala, India',
       socialLinks: SocialLinks(
         github: 'https://github.com/4khil-raj',
@@ -45,11 +47,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
         endDate: 'Present',
         isCurrent: true,
         highlights: [
-          'Lead development of cross-platform marketing automation apps serving thousands of users',
-          'Mentored junior developers and conducted thorough code reviews to maintain code quality',
-          'Designed scalable architectures with Bloc + Domain Driven Design patterns',
-          'Integrated third-party APIs, Firebase services, and payment gateways',
-          'Optimized performance, reduced crashes by ~30%, and improved load times significantly',
+          'Lead the development of high-performance cross-platform mobile apps for marketing automation and client solutions, collaborating cross-functionally with product and design stakeholders.',
+          'Mentored junior developers, conducted code reviews, and improved development efficiency across the team.',
+          'Designed and implemented scalable architectures using Bloc + Domain Driven Design, incorporating unit and widget testing to maintain code reliability across sprints.',
+          'Integrated third-party APIs, Firebase services (including FCM push notifications), WebSockets for real-time data, and Payment Gateways for real-time client applications.',
+          'Managed release pipelines and app store submissions via Play Console and App Store Connect, streamlining CI/CD deployment.',
+          'Optimized app performance, reducing crashes by 30% and improving load times.',
+          'Adopted AI-Assisted Development practices with GitHub Copilot and the Claude API, using Vibe Coding Workflows to accelerate feature delivery and improve code quality.',
         ],
       ),
       ExperienceModel(
@@ -59,11 +63,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
         startDate: 'May 2024',
         endDate: 'Nov 2024',
         highlights: [
-          'Developed commercial Flutter apps with REST APIs and Firebase backend integration',
-          'Collaborated with UI/UX designers to deliver pixel-perfect user interfaces',
-          'Implemented Bloc + Provider for maintainable and testable state management',
-          'Worked with CI/CD pipelines for automated testing and deployment',
-          'Contributed to agile development cycles with regular sprint deliverables',
+          'Developed commercial Flutter apps with REST API integration, Firebase backend, and CI/CD pipelines (GitHub Actions/Codemagic).',
+          'Collaborated in Agile/Scrum sprints with cross-functional teams including UI/UX designers to deliver pixel-perfect, responsive applications.',
+          'Implemented state management using Bloc and Provider to ensure long-term maintainability and testability.',
         ],
       ),
       ExperienceModel(
@@ -73,11 +75,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
         startDate: 'July 2023',
         endDate: 'May 2024',
         highlights: [
-          'Built multiple Flutter applications with Hive, SQLite, and Firebase databases',
-          'Explored various state management solutions including GetX and Provider',
-          'Strengthened foundations in software architecture and design patterns',
-          'Practiced Agile methodologies and collaborative development workflows',
-          'Completed intensive training in Flutter development and mobile app architecture',
+          'Gained hands-on experience in Flutter app development through multiple end-to-end projects.',
+          'Built apps using Hive, SQLite, and Firebase, and explored GetX state management.',
+          'Strengthened understanding of software architecture, unit testing fundamentals, and Agile methodologies.',
         ],
       ),
     ];
@@ -89,14 +89,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
       EducationModel(
         degree: 'Diploma in Computer Engineering',
         institution: 'GPTC Nedumkandam, Idukki, Kerala',
-        duration: '2020 - 2023',
-        description: 'Specialized in software development and computer fundamentals',
+        duration: '2020 – 2023',
+        description: 'Specialized in software development, data structures, and computer fundamentals',
       ),
       EducationModel(
         degree: 'Higher Secondary (Science)',
         institution: 'DBHSS Cheriyanadu, Alappuzha, Kerala',
-        duration: '2018 - 2020',
-        description: 'Focused on Mathematics and Computer Science',
+        duration: '2018 – 2020',
+        description: 'Focused on Mathematics, Physics, and Computer Science',
       ),
     ];
   }
@@ -106,53 +106,63 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return const [
       SkillCategoryModel(
         category: 'Languages',
-        skills: ['Dart', 'JavaScript'],
+        skills: ['Dart'],
         colorIndex: 0,
       ),
       SkillCategoryModel(
         category: 'Frameworks',
-        skills: ['Flutter', 'Flutter Web', 'Flutter Desktop'],
+        skills: ['Flutter'],
         colorIndex: 1,
       ),
       SkillCategoryModel(
         category: 'State Management',
-        skills: ['Bloc', 'Cubit', 'Provider', 'GetX', 'Riverpod'],
+        skills: ['Bloc', 'Provider', 'GetX', 'Riverpod'],
         colorIndex: 2,
       ),
       SkillCategoryModel(
         category: 'Database',
-        skills: ['Firebase Firestore', 'Hive', 'SQLite', 'Shared Preferences'],
+        skills: ['Firebase', 'Hive', 'SQLite'],
         colorIndex: 3,
       ),
       SkillCategoryModel(
-        category: 'Backend & APIs',
-        skills: ['REST APIs', 'GraphQL', 'Firebase Auth', 'Cloud Functions'],
+        category: 'Backend',
+        skills: ['REST APIs', 'GraphQL', 'WebSockets', 'Payment Gateways'],
         colorIndex: 4,
-      ),
-      SkillCategoryModel(
-        category: 'UI & Animations',
-        skills: ['Custom Widgets', 'Animations', 'Responsive Design', 'Material 3'],
-        colorIndex: 5,
-      ),
-      SkillCategoryModel(
-        category: 'Tools & Version Control',
-        skills: ['Git', 'GitHub', 'VS Code', 'Android Studio', 'Postman', 'Figma'],
-        colorIndex: 6,
-      ),
-      SkillCategoryModel(
-        category: 'Architecture',
-        skills: ['Clean Architecture', 'Domain Driven Design', 'MVVM', 'MVC'],
-        colorIndex: 7,
-      ),
-      SkillCategoryModel(
-        category: 'Deployment',
-        skills: ['Play Store', 'App Store', 'CI/CD', 'Fastlane', 'Firebase Hosting'],
-        colorIndex: 0,
       ),
       SkillCategoryModel(
         category: 'Testing',
         skills: ['Unit Testing', 'Widget Testing', 'Integration Testing'],
+        colorIndex: 5,
+      ),
+      SkillCategoryModel(
+        category: 'Native Integration',
+        skills: ['Platform Channels', 'Android (Kotlin) & iOS (Swift) basics'],
+        colorIndex: 6,
+      ),
+      SkillCategoryModel(
+        category: 'Tools',
+        skills: ['Git', 'GitHub', 'Postman', 'Swagger', 'Figma', 'Canva', 'Jira'],
+        colorIndex: 7,
+      ),
+      SkillCategoryModel(
+        category: 'Architecture',
+        skills: ['Domain Driven Design', 'Clean Architecture', 'MVC', 'MVVM'],
+        colorIndex: 0,
+      ),
+      SkillCategoryModel(
+        category: 'Process',
+        skills: ['Agile/Scrum', 'Sprint Planning', 'Cross-functional Collaboration'],
         colorIndex: 1,
+      ),
+      SkillCategoryModel(
+        category: 'Deployment',
+        skills: ['CI/CD (GitHub Actions, Codemagic)', 'Play Console', 'App Store Connect'],
+        colorIndex: 2,
+      ),
+      SkillCategoryModel(
+        category: 'AI-Assisted Development',
+        skills: ['GitHub Copilot', 'Claude API', 'Vibe Coding Workflows'],
+        colorIndex: 3,
       ),
     ];
   }
@@ -160,16 +170,43 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   List<SkillModel> getMainSkills() {
     return const [
-      SkillModel(name: 'Flutter', proficiency: 0.95),
-      SkillModel(name: 'Dart', proficiency: 0.92),
-      SkillModel(name: 'Bloc/Cubit', proficiency: 0.90),
-      SkillModel(name: 'Firebase', proficiency: 0.85),
-      SkillModel(name: 'REST APIs', proficiency: 0.88),
-      SkillModel(name: 'Git', proficiency: 0.85),
-      SkillModel(name: 'Provider', proficiency: 0.88),
-      SkillModel(name: 'Clean Architecture', proficiency: 0.85),
-      SkillModel(name: 'UI/UX Design', proficiency: 0.82),
-      SkillModel(name: 'App Deployment', proficiency: 0.80),
+      SkillModel(name: 'Flutter & Dart', proficiency: 0.95),
+      SkillModel(name: 'Bloc / Provider / GetX / Riverpod', proficiency: 0.92),
+      SkillModel(name: 'AI-Assisted Dev (Copilot & Claude API)', proficiency: 0.92),
+      SkillModel(name: 'Domain Driven Design & Clean Arch', proficiency: 0.90),
+      SkillModel(name: 'REST APIs, GraphQL & WebSockets', proficiency: 0.88),
+      SkillModel(name: 'Firebase, Hive & SQLite', proficiency: 0.88),
+      SkillModel(name: 'CI/CD, Play Console & App Store', proficiency: 0.85),
+      SkillModel(name: 'Unit, Widget & Integration Testing', proficiency: 0.85),
+      SkillModel(name: 'Native Integration (Kotlin/Swift basics)', proficiency: 0.82),
+      SkillModel(name: 'Agile/Scrum & Cross-functional Lead', proficiency: 0.88),
+    ];
+  }
+
+  @override
+  List<ProjectModel> getProjects() {
+    return const [
+      ProjectModel(
+        title: 'Marketing Automation Suite',
+        description:
+            'Cross-platform mobile application for real-time lead analytics, campaign scheduling, and team performance tracking built for MotionRay.',
+        technologies: ['Flutter', 'Dart', 'Bloc', 'REST APIs', 'Firebase Cloud Messaging'],
+        githubUrl: 'https://github.com/4khil-raj',
+      ),
+      ProjectModel(
+        title: 'VehicleCare Fleet & Maintenance',
+        description:
+            'Comprehensive vehicle service, maintenance tracking, and telemetry analytics platform built with Clean Architecture, SQLite, and custom chart visualizations.',
+        technologies: ['Flutter', 'Bloc', 'Drift/SQLite', 'Clean Architecture', 'Custom Painters'],
+        githubUrl: 'https://github.com/4khil-raj',
+      ),
+      ProjectModel(
+        title: 'Enterprise Cross-Platform Portal',
+        description:
+            'Responsive web and mobile application featuring stateful authentication, offline-first sync with Hive, and interactive dashboard UI components.',
+        technologies: ['Flutter Web', 'Hive', 'Provider', 'Responsive Layout', 'GraphQL'],
+        githubUrl: 'https://github.com/4khil-raj',
+      ),
     ];
   }
 }

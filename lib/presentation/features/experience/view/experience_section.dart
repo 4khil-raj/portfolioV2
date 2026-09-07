@@ -4,10 +4,11 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/utils/scroll_animations.dart';
 import '../../../common/widgets/section_title.dart';
 import '../../home/view_model/home_cubit.dart';
 
-/// Clean, minimal Experience section
+/// Next-Gen Experience Section with Glowing Vertical Timeline Rail
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
 
@@ -24,32 +25,54 @@ class ExperienceSection extends StatelessWidget {
         return Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? AppSizes.lg : AppSizes.xxl,
+            horizontal: isMobile ? AppSizes.lg : AppSizes.xxl * 2,
             vertical: isMobile ? AppSizes.sectionPaddingMobile : AppSizes.sectionPadding,
           ),
           color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
+              constraints: const BoxConstraints(maxWidth: 1100),
               child: Column(
                 children: [
-                  const SectionTitle(title: AppStrings.experience),
+                  ScrollFadeIn(
+                    key: const ValueKey('experience_title'),
+                    duration: const Duration(milliseconds: 600),
+                    child: const SectionTitle(title: AppStrings.experience),
+                  ),
+                  const SizedBox(height: AppSizes.md),
+                  ScrollFadeIn(
+                    key: const ValueKey('experience_subtitle'),
+                    delay: const Duration(milliseconds: 100),
+                    child: Text(
+                      'Career journey & key engineering contributions',
+                      style: AppTextStyles.bodyMedium(
+                        isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                   const SizedBox(height: AppSizes.xxl),
-                  // Experience cards
-                  ...experiences.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final experience = entry.value;
-                    return _ExperienceCard(
-                      role: experience.role,
-                      company: experience.company,
-                      duration: experience.duration,
-                      location: experience.location,
-                      highlights: experience.highlights,
-                      isCurrent: experience.isCurrent,
-                      isLast: index == experiences.length - 1,
-                      isDark: isDark,
-                    );
-                  }),
+                  // Timeline items
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: experiences.length,
+                    itemBuilder: (context, index) {
+                      final experience = experiences[index];
+                      return ScrollSlideIn(
+                        key: ValueKey('experience_item_$index'),
+                        direction: index % 2 == 0 ? SlideDirection.left : SlideDirection.right,
+                        delay: Duration(milliseconds: 150 + (index * 150)),
+                        duration: const Duration(milliseconds: 800),
+                        child: _TimelineExperienceCard(
+                          experience: experience,
+                          isLast: index == experiences.length - 1,
+                          isDark: isDark,
+                          index: index,
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -60,32 +83,24 @@ class ExperienceSection extends StatelessWidget {
   }
 }
 
-class _ExperienceCard extends StatefulWidget {
-  final String role;
-  final String company;
-  final String duration;
-  final String location;
-  final List<String> highlights;
-  final bool isCurrent;
+class _TimelineExperienceCard extends StatefulWidget {
+  final dynamic experience;
   final bool isLast;
   final bool isDark;
+  final int index;
 
-  const _ExperienceCard({
-    required this.role,
-    required this.company,
-    required this.duration,
-    required this.location,
-    required this.highlights,
-    required this.isCurrent,
+  const _TimelineExperienceCard({
+    required this.experience,
     required this.isLast,
     required this.isDark,
+    required this.index,
   });
 
   @override
-  State<_ExperienceCard> createState() => _ExperienceCardState();
+  State<_TimelineExperienceCard> createState() => _TimelineExperienceCardState();
 }
 
-class _ExperienceCardState extends State<_ExperienceCard> {
+class _TimelineExperienceCardState extends State<_TimelineExperienceCard> {
   bool _isHovered = false;
 
   @override
@@ -94,157 +109,249 @@ class _ExperienceCardState extends State<_ExperienceCard> {
     final secondaryColor =
         widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: EdgeInsets.only(bottom: widget.isLast ? 0 : AppSizes.lg),
-        padding: const EdgeInsets.all(AppSizes.xl),
-        decoration: BoxDecoration(
-          color: widget.isDark ? AppColors.darkCard : AppColors.lightCard,
-          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-          border: Border.all(
-            color: _isHovered
-                ? AppColors.primary.withValues(alpha: 0.3)
-                : (widget.isDark ? AppColors.darkDivider : AppColors.lightDivider),
-          ),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ]
-              : null,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Company icon
-                Container(
-                  padding: const EdgeInsets.all(AppSizes.md),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                  ),
-                  child: const Icon(
-                    Icons.work_outline_rounded,
-                    color: AppColors.primary,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: AppSizes.md),
-                // Title and company
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.role,
-                              style: AppTextStyles.titleMedium(textColor),
-                            ),
-                          ),
-                          if (widget.isCurrent)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSizes.sm,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.accent.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-                              ),
-                              child: Text(
-                                'Current',
-                                style: AppTextStyles.labelSmall(AppColors.accent),
-                              ),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: AppSizes.xs),
-                      Text(
-                        widget.company,
-                        style: AppTextStyles.bodyMedium(AppColors.primary),
-                      ),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < AppSizes.mobileBreakpoint;
+
+    final accentColors = [
+      AppColors.primary,
+      AppColors.secondary,
+      AppColors.accent,
+    ];
+    final cardAccent = accentColors[widget.index % accentColors.length];
+
+    final nodeSize = widget.experience.isCurrent ? 22.0 : 18.0;
+    final dotCenterLeft = nodeSize / 2 - 1.0;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSizes.xxl),
+      child: Stack(
+        children: [
+          // Connecting Timeline Rail Line
+          if (!widget.isLast)
+            Positioned(
+              left: dotCenterLeft,
+              top: nodeSize,
+              bottom: 0,
+              child: Container(
+                width: 2,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      cardAccent.withValues(alpha: 0.6),
+                      accentColors[(widget.index + 1) % accentColors.length].withValues(alpha: 0.3),
                     ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: AppSizes.md),
-            // Duration and location
-            Row(
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: 14,
-                  color: secondaryColor,
-                ),
-                const SizedBox(width: AppSizes.xs),
-                Text(
-                  widget.duration,
-                  style: AppTextStyles.bodySmall(secondaryColor),
-                ),
-                const SizedBox(width: AppSizes.lg),
-                Icon(
-                  Icons.location_on_outlined,
-                  size: 14,
-                  color: secondaryColor,
-                ),
-                const SizedBox(width: AppSizes.xs),
-                Text(
-                  widget.location,
-                  style: AppTextStyles.bodySmall(secondaryColor),
-                ),
-              ],
-            ),
-            if (widget.highlights.isNotEmpty) ...[
-              const SizedBox(height: AppSizes.md),
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: widget.isDark ? AppColors.darkDivider : AppColors.lightDivider,
               ),
-              const SizedBox(height: AppSizes.md),
-              // Highlights
-              ...widget.highlights.map(
-                (highlight) => Padding(
-                  padding: const EdgeInsets.only(bottom: AppSizes.sm),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        width: 4,
-                        height: 4,
-                        decoration: const BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                        ),
+            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Timeline Step Node Dot
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: nodeSize,
+                height: nodeSize,
+                decoration: BoxDecoration(
+                  color: widget.experience.isCurrent
+                      ? cardAccent
+                      : (widget.isDark ? AppColors.darkCard : AppColors.lightCard),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: cardAccent,
+                    width: 3,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: cardAccent.withValues(alpha: widget.experience.isCurrent ? 0.6 : 0.3),
+                      blurRadius: widget.experience.isCurrent ? 12 : 6,
+                      spreadRadius: widget.experience.isCurrent ? 2 : 0,
+                    ),
+                  ],
+                ),
+                child: widget.experience.isCurrent
+                    ? const Center(
+                        child: Icon(Icons.check, size: 10, color: Colors.white),
+                      )
+                    : null,
+              ),
+              SizedBox(width: isMobile ? AppSizes.md : AppSizes.lg),
+              // Main Experience Details Card
+              Expanded(
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => _isHovered = true),
+                  onExit: (_) => setState(() => _isHovered = false),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: EdgeInsets.all(isMobile ? AppSizes.lg : AppSizes.xl),
+                    decoration: BoxDecoration(
+                      color: widget.isDark ? AppColors.darkCard : AppColors.lightCard,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: _isHovered
+                            ? cardAccent.withValues(alpha: 0.45)
+                            : (widget.isDark ? AppColors.darkDivider : AppColors.lightDivider),
+                        width: _isHovered ? 1.5 : 1.0,
                       ),
-                      const SizedBox(width: AppSizes.sm),
-                      Expanded(
-                        child: Text(
-                          highlight,
-                          style: AppTextStyles.bodySmall(secondaryColor),
+                      boxShadow: _isHovered
+                          ? [
+                              BoxShadow(
+                                color: cardAccent.withValues(alpha: 0.15),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: widget.isDark ? 0.2 : 0.04),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Header Row: Role Title & Current Badge
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: cardAccent.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Icon(Icons.work_rounded, color: cardAccent, size: 22),
+                            ),
+                            const SizedBox(width: AppSizes.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Wrap(
+                                    alignment: WrapAlignment.spaceBetween,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    spacing: 8,
+                                    runSpacing: 6,
+                                    children: [
+                                      Text(
+                                        widget.experience.role,
+                                        style: AppTextStyles.titleMedium(textColor).copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      if (widget.experience.isCurrent)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.accent.withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(color: AppColors.accent.withValues(alpha: 0.4)),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 6,
+                                                height: 6,
+                                                decoration: const BoxDecoration(
+                                                  color: AppColors.accent,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                'Present Role',
+                                                style: AppTextStyles.labelSmall(AppColors.accent).copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    widget.experience.company,
+                                    style: AppTextStyles.bodyMedium(cardAccent).copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppSizes.md),
+                        // Duration & Location Meta Bar
+                        Wrap(
+                          spacing: AppSizes.lg,
+                          runSpacing: 6,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.calendar_today_rounded, size: 14, color: secondaryColor),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.experience.duration,
+                                  style: AppTextStyles.bodySmall(secondaryColor).copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.location_on_rounded, size: 14, color: secondaryColor),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.experience.location,
+                                  style: AppTextStyles.bodySmall(secondaryColor).copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        const Divider(height: 1),
+                        const SizedBox(height: AppSizes.md),
+                        // Highlights Bullet Points
+                        ...(widget.experience.highlights as List<String>).map((highlight) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.arrow_right_rounded, size: 18, color: cardAccent),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    highlight,
+                                    style: AppTextStyles.bodySmall(secondaryColor).copyWith(height: 1.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ],
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
